@@ -15,8 +15,8 @@ const WorkoutTips = () => {
 
   return (
     <div>
-      <h2>Workout Tips</h2>
-      <button onClick={fetchTips}>Get Tips</button>
+      <h2>Dicas de Trenio</h2>
+      <button onClick={fetchTips}>Receber Dicas</button>
       <p>{tips}</p>
     </div>
   );
