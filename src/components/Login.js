@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../styles/Login.css'; // Importando o CSS para estilizar
+import { Link } from 'react-router-dom';
+import '../styles/Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -7,7 +8,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Sua lógica de login aqui
+    // Lógica de login
   };
 
   return (
@@ -27,6 +28,9 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Entrar</button>
+        <p>
+          Não tem uma conta? <Link to="/register">Cadastre-se aqui</Link>
+        </p>
       </form>
     </div>
   );
