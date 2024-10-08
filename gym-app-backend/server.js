@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());  // Para permitir que o servidor lide com JSON no corpo das requisições
 
 // Login endpoint
-router.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const result = await sql.query`SELECT * FROM Users WHERE Email = ${email} AND Password = ${password}`;
@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = app;
 
 // Rota para adicionar um novo usuário
 app.post('/api/users', (req, res) => {

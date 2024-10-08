@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Login.css';
+// import logoApp from '../static/IA.png'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -9,7 +10,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
@@ -35,6 +36,9 @@ const Login = () => {
   return (
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
+        {/* <img
+          src={logoApp}
+          alt='Logo IaGym' /> */}
         <h2>Login</h2>
         {error && <p className="error">{error}</p>}
         <input
