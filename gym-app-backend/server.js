@@ -7,7 +7,7 @@ const app = express();
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'sua_senha',
+  password: 'J$ffLim@',
   database: 'GymAppDB'
 });
 
