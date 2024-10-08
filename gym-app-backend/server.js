@@ -15,6 +15,24 @@ const connection = mysql.createConnection({
 app.use(cors());
 app.use(express.json());  // Para permitir que o servidor lide com JSON no corpo das requisições
 
+// Login endpoint
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const result = await sql.query`SELECT * FROM Users WHERE Email = ${email} AND Password = ${password}`;
+    if (result.recordset.length > 0) {
+      res.status(200).send('Login successful');
+    } else {
+      res.status(401).send('Invalid credentials');
+    }
+  } catch (err) {
+    console.error('Error logging in:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+module.exports = router;
+
 // Rota para adicionar um novo usuário
 app.post('/api/users', (req, res) => {
   const { username, email, passwordHash } = req.body;
