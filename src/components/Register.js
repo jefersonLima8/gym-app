@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2'
 import '../styles/Register.css';
 
 const Register = () => {
@@ -31,7 +32,14 @@ const Register = () => {
 
       const data = await response.json();
       // Aqui você pode redirecionar ou exibir uma mensagem de sucesso
-      console.log('Cadastro realizado com sucesso:', data);
+      // console.log('Cadastro realizado com sucesso:', data);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Cadastro realizado com sucesso!",
+        showConfirmButton: false,
+        timer: 3000
+      });
     } catch (error) {
       setError(error.message);
       console.error('Erro ao cadastrar:', error);
