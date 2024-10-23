@@ -6,19 +6,21 @@ const API_KEY = process.env.API_KEY;
 const api = axios.create({
     apiURL: API_URL,
     headers: {
-        'Authorization': `Bearer ${API_KEY}`,
         'Content-Type': 'application/json',
     },
 });
 
 const sendRequest = async (prompt) => {
     try {
-        const response = await api.post('/chat/completions', {
-            model: 'gemini 1.5 flash',
-            messages: [
+        const response = await api.post(`/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+            contents: [
                 {
-                    role: 'user', 
-                    content: prompt
+                    parts: [
+                        {
+                            text: prompt
+                        }
+                    ],
+
                 }
             ],
 
