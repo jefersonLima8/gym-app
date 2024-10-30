@@ -1,39 +1,91 @@
 /* Estilização para a tela de Login */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: white;
+}
+
+.login-form {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px; /* Define uma largura máxima para evitar que o formulário se estenda demais em telas grandes */
+  width: 90%; /* Faz o formulário ocupar quase toda a largura em telas menores */
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0; /* Reduz a margem entre os inputs */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px; /* Reduz o padding do botão para deixá-lo mais próximo */
+  margin: 5px 0; /* Reduz a margem entre os inputs */
+  background-color: #2f98bc;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+  background-color: #0c57a3;
+}
+
+.login-logo {
+  display: block;
+  margin: 0 auto 5px;
+  width: 100%; /* Aumenta a largura padrão da imagem */
+  max-width: 400px; /* Define uma largura máxima maior para a imagem */
+}
+
+h2{
+  margin-bottom: 5px; /* Diminui o espaçamento abaixo do título "Login" */
+}
+
+.error {
+  margin: 5px o; /* Reduz o espaçmaneto da mensagem de erro */}
+
+/* Ajustes responsivos para telas menores */
+@media (max-width: 768px) {
+  .login-logo {
+      width: 70%; /* Aumenta a largura da imagem em dispositivos móveis */
   }
-  
-  .login-form {
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .login-logo {
+      width: 60%; /* A largura da imagem será um pouco maior até em telas muito pequenas */
   }
-  
-  .login-form input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
+
   .login-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: #2f98bc;
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+      font-size: 14px; /* Reduz o tamanho da fonte do botão em telas muito pequenas */
   }
-  
-  .login-form button:hover {
-    background-color: #084c63;
-  }
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container input {
+  width: 100%;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #2f98bc;
+  font-size: 18px; /* Ajuste o tamanho do ícone se necessário */
+}

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
 const app = express();
+const util = require('util');
 
 // Configurações do MySQL
 const connection = mysql.createConnection({
@@ -19,12 +20,16 @@ app.use(express.json());  // Para permitir que o servidor lide com JSON no corpo
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const result = await sql.query`SELECT * FROM Users WHERE Email = ${email} AND Password = ${password}`;
-    if (result.recordset.length > 0) {
-      res.status(200).send('Login successful');
+    const query = 'SELECT id, username FROM Users WHERE email = ? AND passwordHash = ?';
+    const queryAsync = util.promisify(connection.query).bind(connection);
+
+    const result = await queryAsync(query, [email, password]);
+    if (result.length > 0) {
+        res.status(200).json({ message: 'Usuário logado com sucesso!', userId: result });
     } else {
-      res.status(401).send('Invalid credentials');
+        res.status(401).json({ message: 'Usuário ou senha inválidos.' });
     }
+
   } catch (err) {
     console.error('Error logging in:', err);
     res.status(500).send('Internal Server Error');

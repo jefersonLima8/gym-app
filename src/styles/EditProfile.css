@@ -1,0 +1,54 @@
+.edit-profile-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+h2 {
+    font-size: 24px;
+    color: #2f98bc;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+button {
+    width: 100%;
+    background-color: #2f98bc;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0c57a3;
+}
+
+.success-message {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+}
