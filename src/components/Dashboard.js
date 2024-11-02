@@ -5,6 +5,7 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { sendRequest } from '../services/api.js';
 import logoApp from '../static/IA.png';
 import '../styles/Dashboard.css';
+import { useLocation } from 'react-router-dom';
 
 const Dashboard = ({ userId }) => {
   const [question, setQuestion] = useState('');
@@ -13,6 +14,9 @@ const Dashboard = ({ userId }) => {
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+ const paramsUserId = location.state.data[0].id;
+ const nome = location.state.data[0].username ? location.state.data[0].username : 'Usuário(a)';
 
   const formatResponse = (responseText) => {
     const formattedText = responseText
@@ -69,7 +73,7 @@ const Dashboard = ({ userId }) => {
   return (
     <div className="dashboard-container">
       <img src={logoApp} alt='Logo IaGym' className='login-logo' />
-      <p className="welcome-text">Olá USUARIO, seja bem-vindo ao IAGYM</p>
+      <p className="welcome-text">Olá {nome}, seja bem-vindo ao IAGYM</p>
       
       <div className="settings-container">
         <FontAwesomeIcon
@@ -80,7 +84,7 @@ const Dashboard = ({ userId }) => {
         {showSettings && (
           <div className="settings-menu">
             <ul>
-              <li onClick={() => navigate('/EditProfile')}>Editar Perfil</li>
+              <li onClick={() => navigate('/EditProfile', { state: {paramsUserId}})}>Editar Perfil</li>
               <li onClick={handleLogout}>Sair</li>
             </ul>
           </div>

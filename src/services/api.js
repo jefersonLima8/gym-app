@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL;
-const API_KEY = process.env.API_KEY;
+const API_URL = 'https://generativelanguage.googleapis.com/v1beta';
+const API_KEY = 'AIzaSyC14T71CM2zfd8jesGM8WUFnZs0pkyxr5I';
 
 const api = axios.create({
     apiURL: API_URL,
@@ -12,7 +12,8 @@ const api = axios.create({
 
 const sendRequest = async (prompt) => {
     try {
-        const response = await api.post(`/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+        const requestUrl = `${API_URL}/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+        const response = await api.post(requestUrl, {
             contents: [
                 {
                     parts: [
@@ -33,4 +34,4 @@ const sendRequest = async (prompt) => {
     }
 };
 
-export default api;
+export { sendRequest };

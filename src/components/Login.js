@@ -17,10 +17,11 @@ const Login = ({ authenticateUser }) => {
 
     try {
       // Chama a função authenticateUser e passa os parâmetros
-      const userId = await authenticateUser(email, password);
+      // const userId = await authenticateUser(email, password);
+      const data = await authenticateUser(email, password);
       // Se a autenticação for bem-sucedida, redireciona para o Dashboard
-      if (userId) {
-        navigate('/dashboard');
+      if (data) {
+        navigate('/dashboard', { state: {data}});
       }
     } catch (error) {
       setError('Usuário ou senha incorretos'); // Mensagem de erro padrão

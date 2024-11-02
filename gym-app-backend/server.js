@@ -51,8 +51,27 @@ app.post('/api/users', (req, res) => {
   });
 });
 
+// Histórico de treino Endpoint
+app.post('/user/:userId', async (req, res) => {
+  const { id } = req.params;
+  const { usuario, email} = req.body;
+  try {
+    const query = 'UPDATE users SET Username = ?, Email  = ? WHERE id = ?';
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const result = await queryAsync(query, [usuario, email, id]);
+    if (result.affectedRows > 0) {
+      res.status(200).json({message: 'Usuário atualizado com sucesso!'})
+    } else {
+      res.status(404).json({message: 'Usuário não encontrado'});
+    }
+  } catch (err){
+    console.error('Error no put da edição de dados do usuario:', err);
+    res.status(500).send('Erro');
+  }
+});
+
 // Rota para obter os treinos de um usuário
-app.get('/api/workouts/:userId', (req, res) => {
+app.post('/api/workouts/:userId', (req, res) => {
   const { userId } = req.params;
   const query = 'SELECT * FROM Workouts WHERE UserId = ?';
   connection.query(query, [userId], (err, results) => {
@@ -65,11 +84,14 @@ app.get('/api/workouts/:userId', (req, res) => {
 });
 
 // Rota para atualizar um treino
+// @TODO Corrigir url da rota
 app.put('/api/workouts/:id', (req, res) => {
   const { id } = req.params;
-  const { exercise, reps, sets } = req.body;
-  const query = 'UPDATE Workouts SET Exercise = ?, Reps = ?, Sets = ? WHERE Id = ?';
-  connection.query(query, [exercise, reps, sets, id], (err, result) => {
+  const { username, email} = req.body;
+  console.log(res.body);
+  const query = 'UPDATE users SET Username = ?, Email  = ? WHERE id = ?';
+  connection.query(query, [username, email, id], (err, result) => {
+    console.log('Entrou aqui: ', result)
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
@@ -77,6 +99,7 @@ app.put('/api/workouts/:id', (req, res) => {
     }
   });
 });
+
 
 // Rota para deletar um treino
 app.delete('/api/workouts/:id', (req, res) => {
@@ -87,6 +110,36 @@ app.delete('/api/workouts/:id', (req, res) => {
       res.status(500).json({ error: err.message });
     } else {
       res.status(200).json({ message: 'Treino excluído com sucesso!' });
+    }
+  });
+});
+
+// Histórico de treino
+app.post('/api/workouthistory', (req, res) => {
+  const { texto, user_id } = req.body;
+  const query = 'INSERT INTO workouthistory (treino, user_id) VALUES (?, ?)';
+
+  connection.query(query, [texto, user_id], (err, result) => {
+    if (result.affectedRows > 0) {
+      res.status(201).json({ message: 'Treino criado com sucesso!', postId: result.insertId });
+    } else {
+      res.status(500).json({ error: err.message });
+    }
+  });
+});
+
+//  Histórico de treino
+app.get('/api/workouthistory/:user_id', (req, res) => {
+  const { user_id } = req.params;
+  const query = 'SELECT treino FROM workouthistory WHERE user_id = ? ORDER BY id DESC';
+
+  connection.query(query, [user_id], (err, results) => {
+    if (results.length > 0) {
+      res.status(200).json(results[0]);
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Nenhum treino encontrado.' });
     }
   });
 });
