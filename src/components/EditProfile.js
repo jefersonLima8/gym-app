@@ -6,7 +6,8 @@ import '../styles/EditProfile.css';
 const EditProfile = () => {
   const location = useLocation();
   // const { userId } = location.state.paramsUserId;
-  const userId = 22;
+  // const { userId} = localStorage.setItem('userId', location.state.paramsUserId);
+  // const userId = { userId};
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -28,7 +29,8 @@ const EditProfile = () => {
   const handleSave = async () => {
     try {
       const username = name;
-      const response = await axios.put(`http://localhost:5000/api/users/${userId}`, {
+      const storedUserId = localStorage.getItem('userId');
+      const response = await axios.put(`http://localhost:5000/api/users/${storedUserId}`, {
         username,
         email,
       });
@@ -37,7 +39,7 @@ const EditProfile = () => {
         setSuccessMessage('Perfil atualizado com sucesso!');
         setTimeout(() => {
           const data = [
-            { id: userId },
+            { id: storedUserId, username: username },
           ];
           navigate('/dashboard', { state: { data } });
         }, 2000);

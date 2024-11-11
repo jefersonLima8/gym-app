@@ -2,11 +2,10 @@ import React, { useState, useCallback , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import { sendRequest } from '../services/api.js';
+import { sendRequest,setWorkoutHistoryAPI, getWorkoutHistory } from '../services/api.js';
 import logoApp from '../static/IA.png';
 import '../styles/Dashboard.css';
 import { useLocation } from 'react-router-dom';
-import { setWorkoutHistory, getWorkoutHistory} from '../App.js'
 
 
 const Dashboard = ({ userId }) => {
@@ -19,6 +18,7 @@ const Dashboard = ({ userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
  const paramsUserId = location.state.data[0].id;
+ localStorage.setItem('userId', paramsUserId);
  const nome = location.state.data[0].username ? location.state.data[0].username : 'Usuário(a)';
 
   const formatResponse = (responseText) => {
@@ -58,7 +58,9 @@ const Dashboard = ({ userId }) => {
         const rawResponse = res.candidates[0].content.parts[0].text;
         const formattedResponse = formatResponse(rawResponse);
         setResponse(formattedResponse);
-        await setWoworkoutHistory(formattedResponse, paramsUserId);
+        const transfString = formattedResponse.toString();
+        const texto = transfString.replace(/<[^>]*>/g, '');
+        await setWorkoutHistoryAPI(texto, paramsUserId);
       } else {
         console.warn('Estrutura de resposta inesperada:', res);
         setResponse('Resposta não encontrada.');

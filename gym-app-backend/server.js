@@ -131,7 +131,7 @@ app.post('/api/workouthistory', (req, res) => {
 //  Histórico de treino - atual
 app.get('/api/workouthistory/:user_id', (req, res) => {
   const { user_id } = req.params;
-  const query = 'SELECT texto FROM workouthistory WHERE user_id = ? ORDER BY id DESC LIMIT 1';
+  const query = 'SELECT treino FROM workouthistory WHERE user_id = ? ORDER BY id DESC LIMIT 1';
 
   connection.query(query, [user_id], (err, results) => {
     if (results.length > 0) {
