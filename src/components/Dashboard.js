@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,8 @@ import { sendRequest } from '../services/api.js';
 import logoApp from '../static/IA.png';
 import '../styles/Dashboard.css';
 import { useLocation } from 'react-router-dom';
+import { setWorkoutHistory, getWorkoutHistory} from '../App.js'
+
 
 const Dashboard = ({ userId }) => {
   const [question, setQuestion] = useState('');
@@ -13,6 +15,7 @@ const Dashboard = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
+  const [workoutHistory, setWorkoutHistory] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
  const paramsUserId = location.state.data[0].id;
@@ -55,6 +58,7 @@ const Dashboard = ({ userId }) => {
         const rawResponse = res.candidates[0].content.parts[0].text;
         const formattedResponse = formatResponse(rawResponse);
         setResponse(formattedResponse);
+        await setWoworkoutHistory(formattedResponse, paramsUserId);
       } else {
         console.warn('Estrutura de resposta inesperada:', res);
         setResponse('Resposta não encontrada.');
@@ -69,6 +73,24 @@ const Dashboard = ({ userId }) => {
   const handleLogout = () => {
     navigate('/login');
   };
+
+  const handleWorkoutHistory = useCallback(async () => {
+    try {
+      const response = await getWorkoutHistory(paramsUserId);
+
+      if (response) {
+        setWorkoutHistory(response);
+      } else {
+        setWorkoutHistory('Ainda não encontramos seu último. Pesquise um abaixo.');
+      }
+    } catch (err) {
+      setError('Erro ao buscar a treino. Tente novamente mais tarde.');
+    }
+  }, [paramsUserId]);
+  
+  useEffect(() => {
+    handleWorkoutHistory();
+  }, [paramsUserId, handleWorkoutHistory])
 
   return (
     <div className="dashboard-container">
@@ -92,7 +114,7 @@ const Dashboard = ({ userId }) => {
       </div>
 
       <div className="last-workout">
-        <h2>Seu último treino</h2>
+        <h2>{workoutHistory}</h2>
       </div>
       <p className="request-text">
         Solicite seu próximo treino - {new Date().toLocaleDateString('pt-BR', {

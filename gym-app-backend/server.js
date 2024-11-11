@@ -85,17 +85,17 @@ app.post('/api/workouts/:userId', (req, res) => {
 
 // Rota para atualizar um treino
 // @TODO Corrigir url da rota
-app.put('/api/workouts/:id', (req, res) => {
+app.put('/api/users/:id', (req, res) => {
   const { id } = req.params;
   const { username, email} = req.body;
   console.log(res.body);
   const query = 'UPDATE users SET Username = ?, Email  = ? WHERE id = ?';
   connection.query(query, [username, email, id], (err, result) => {
-    console.log('Entrou aqui: ', result)
-    if (err) {
-      res.status(500).json({ error: err.message });
+    console.log('aqui');
+    if (result.affectedRows > 0) {
+      res.status(200).json({ message: 'Perfil atualizado com sucesso!' });
     } else {
-      res.status(200).json({ message: 'Treino atualizado com sucesso!' });
+      res.status(400).json({ error: err.message });
     }
   });
 });
@@ -128,21 +128,22 @@ app.post('/api/workouthistory', (req, res) => {
   });
 });
 
-//  Histórico de treino
+//  Histórico de treino - atual
 app.get('/api/workouthistory/:user_id', (req, res) => {
   const { user_id } = req.params;
-  const query = 'SELECT treino FROM workouthistory WHERE user_id = ? ORDER BY id DESC';
+  const query = 'SELECT texto FROM workouthistory WHERE user_id = ? ORDER BY id DESC LIMIT 1';
 
   connection.query(query, [user_id], (err, results) => {
     if (results.length > 0) {
-      res.status(200).json(results[0]);
+      res.status(200).json(results);
     }
-
+    
     if (results.length === 0) {
       return res.status(404).json({ message: 'Nenhum treino encontrado.' });
     }
   });
-});
+});  
+
 
 // Iniciar o servidor
 app.listen(5000, () => {

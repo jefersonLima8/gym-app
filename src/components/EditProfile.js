@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/EditProfile.css';
 
-const EditProfile = ({ userId }) => {
+const EditProfile = () => {
+  const location = useLocation();
+  // const { userId } = location.state.paramsUserId;
+  const userId = 22;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -12,7 +16,7 @@ const EditProfile = ({ userId }) => {
   useEffect(() => {
     const loadUserProfile = async () => {
       // Exemplo de dados do usuário; substitua pelo real quando houver API
-      const userData = { name: 'Usuario', email: 'usuario@exemplo.com' };
+      const userData = { name: '', email: '' };
       setName(userData.name);
       setEmail(userData.email);
     };
@@ -23,16 +27,24 @@ const EditProfile = ({ userId }) => {
   // Função para salvar alterações no perfil do usuário
   const handleSave = async () => {
     try {
-      // Simulação de atualização da API
-      console.log('Salvando perfil:', { name, email });
-      setSuccessMessage('Perfil atualizado com sucesso!');
-      
-      // Redireciona após alguns segundos
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 2000);
+      const username = name;
+      const response = await axios.put(`http://localhost:5000/api/users/${userId}`, {
+        username,
+        email,
+      });
+
+      if (response.status === 200) {
+        setSuccessMessage('Perfil atualizado com sucesso!');
+        setTimeout(() => {
+          const data = [
+            { id: userId },
+          ];
+          navigate('/dashboard', { state: { data } });
+        }, 2000);
+      }
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
+      setSuccessMessage('Erro ao atualizar perfil. Tente novamente.');
     }
   };
 
@@ -43,14 +55,16 @@ const EditProfile = ({ userId }) => {
         <label>Nome:</label>
         <input
           type="text"
+          placeholder='Usuario'
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div className="input-group">
-        <label>Email:</label>
+        <label>E-mail:</label>
         <input
           type="email"
+          placeholder='E-mail'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
